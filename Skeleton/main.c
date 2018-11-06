@@ -83,29 +83,30 @@ int readWordListFromConsole(char wordList[MAX_WORDLIST][MAX_WORD]) {
 int readLetterGridFromFile(char letterGrid[MAX_GRID][MAX_GRID]) {//TODO
     
     
-    FILE * infile;
-    char fileLetterGrid[MAX_FILENAME];
+    FILE *infile1;
+   // char fileLetterGrid[MAX_FILENAME];
     
-    printf("Enter filename of the letter grid: ");
-    scanf("%c",&fileLetterGrid[0]);
+//    printf("Enter filename of the letter grid: ");
+//    scanf("%s",fileLetterGrid);
+
+    infile1 = fopen("LetterGrid.txt","r");
     
-    infile = fopen(fileLetterGrid,"r");
-    
-    if(infile == NULL){
-        printf("Error in reading the letter grid file. Program terminates.");
+    if(infile1 == NULL){
+       printf("Error in reading the letter grid file. Program terminates.");
         exit(1);
-    }
+   }
     
     int gridSize;
-    fscanf(infile,"%d",&gridSize);
+    fscanf(infile1,"%d",&gridSize);
+    printf("\n%d",gridSize);
     
-    for(int i=0;i<gridSize;i++){
-        for(int j=0;j<gridSize;j++){
-            letterGrid[i][j] = getc(infile);
-        }
-    }
+//    for(int i=0;i<gridSize;i++){
+//        for(int j=0;j<gridSize;j++){
+//            letterGrid[i][j] = getc(infile);
+//        }
+//    }
     
-    fclose(infile);
+    fclose(infile1);
     return gridSize;
     return 0;
 }
@@ -174,7 +175,7 @@ void printWordList(char wordList[MAX_WORDLIST][MAX_WORD], int listSize, int matc
         exit(1);
     }
     
-    printf("### Word List of Size %d ###\n", listSize);
+    printf("\n### Word List of Size %d ###\n", listSize);
     
     char matchingStatus1[MAX_WORDLIST];
     
@@ -185,7 +186,7 @@ void printWordList(char wordList[MAX_WORDLIST][MAX_WORD], int listSize, int matc
     }
     
     for(int i=0;i<listSize;i++){
-        printf("[%c] %s",matchingStatus1[i],wordList[i]);
+        printf("[%c] %s\n",matchingStatus1[i],wordList[i]);
     }
     
    
@@ -202,16 +203,16 @@ void printWordList(char wordList[MAX_WORDLIST][MAX_WORD], int listSize, int matc
 int checkWordList(char wordList[MAX_WORDLIST][MAX_WORD], int listSize, int matchingStatus[MAX_WORDLIST], char inputWord[MAX_WORD]) {
     
     
-    for(int i=0;i<MAX_WORDLIST;i++){
-        if(strcmp(inputWord,wordList[i])){
+    for(int i=0;i<listSize;i++){
+        if(strcmp(inputWord,wordList[i]) == 0){
             if(matchingStatus[i] == 1){
-                return listSize;//if match is found as a duplicate, return listSize
+                return 0;//if match is found as a duplicate, return listSize (0 for now)
             }
-            else return i;//if match is found for the first time, return index
+            else return 1;//if match is found for the first time, return index (1 for now)
         }
         
     }
-    return 0;//if no match is found, 0 is returned
+    return -1;//if no match is found, -1 is returned
     
  
 }
@@ -225,8 +226,258 @@ int checkWordList(char wordList[MAX_WORDLIST][MAX_WORD], int listSize, int match
  This function should not print anything, except debugging messages (if any) */
 int checkLetterGrid(char letterGrid[MAX_GRID][MAX_GRID], int gridSize, char inputWord[MAX_WORD], int matchRow, int matchCol, int matchDirection) {
     
+    int matchSize = 0;
     
-   
+    if(letterGrid[matchRow][matchCol] == inputWord[0]){
+        matchSize++;
+        
+        if(matchDirection == 1){
+            int count = 0;
+            
+            int match = 0;
+            if(strlen(inputWord) > gridSize)return -1;
+            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
+                if(letterGrid[matchRow+1][matchCol - 1] == inputWord[ count + 1 ]){
+                    return 1;
+                }
+            }
+            else{
+                while(count < strlen(inputWord)){
+                    if(letterGrid[matchRow+1][matchCol - 1] == inputWord[ count + 1 ]){
+                        
+                        count++;
+                        match++;
+                        matchRow++;
+                        matchCol--;
+                        
+                    }
+                    
+                    
+                }
+            }
+            if(match == strlen(inputWord)){
+                return 1;
+            }else return 0;
+           
+            
+        }
+        
+        if(matchDirection == 2){
+            int count = 0;
+            
+            int match = 0;
+            if(strlen(inputWord) > gridSize)return -1;
+            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
+                if(letterGrid[matchRow++][matchCol] == inputWord[ count + 1 ]){
+                    return 1;
+                }
+            }
+            else{
+                while(count < strlen(inputWord)){
+                    if(letterGrid[matchRow++][matchCol] == inputWord[ count + 1 ]){
+                        
+                        count++;
+                        match++;
+                        matchRow++;
+                        
+                    }
+                    
+                    
+                }
+            }
+            if(match == strlen(inputWord)){
+                return 1;
+            }else return 0;
+            
+            
+        }
+        
+        if(matchDirection == 3){
+            int count = 0;
+            
+            int match = 0;
+            if(strlen(inputWord) > gridSize)return -1;
+            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
+                if(letterGrid[matchRow+1][matchCol + 1] == inputWord[ count + 1 ]){
+                    return 1;
+                }
+            }
+            else{
+                while(count < strlen(inputWord)){
+                    if(letterGrid[matchRow+1][matchCol + 1] == inputWord[ count + 1 ]){
+                        
+                        count++;
+                        match++;
+                        matchCol++;
+                        matchRow++;
+                        
+                    }
+                    
+                    
+                }
+            }
+            if(match == strlen(inputWord)){
+                return 1;
+            }else return 0;
+            
+            
+        }
+        
+        if(matchDirection == 4){
+            int count = 0;
+            
+            int match = 0;
+            if(strlen(inputWord) > gridSize)return -1;
+            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
+                if(letterGrid[matchRow][matchCol - 1] == inputWord[ count + 1 ]){
+                    return 1;
+                }
+            }
+            else{
+                while(count < strlen(inputWord)){
+                    if(letterGrid[matchRow][matchCol - 1] == inputWord[ count + 1 ]){
+                        printf("%c",letterGrid[matchRow][matchCol-1]);
+                        count++;
+                        match++;
+                        matchCol--;
+                        
+                    }
+                    
+                    
+                }
+            }
+            if(match == strlen(inputWord)){
+                return 1;
+            }else return 0;
+            
+            
+        }
+        
+        if(matchDirection == 6){
+            int count = 0;
+            
+            int match = 0;
+            if(strlen(inputWord) > gridSize)return -1;
+            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
+                if(letterGrid[matchRow][matchCol + 1] == inputWord[ count + 1 ]){
+                    return 1;
+                }
+            }
+            else{
+                while(count < strlen(inputWord)){
+                    if(letterGrid[matchRow][matchCol + 1] == inputWord[ count + 1 ]){
+                        
+                        count++;
+                        match++;
+                        matchCol++;
+                        
+                    }
+                    
+                    
+                }
+            }
+            if(match == strlen(inputWord)){
+                return 1;
+            }else return 0;
+            
+            
+        }
+        
+        if(matchDirection == 9){
+            int count = 0;
+            
+            int match = 0;
+            if(strlen(inputWord) > gridSize)return -1;
+            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
+                if(letterGrid[matchRow-1][matchCol + 1] == inputWord[ count + 1 ]){
+                    return 1;
+                }
+            }
+            else{
+                while(count < strlen(inputWord)){
+                    if(letterGrid[matchRow-1][matchCol +1] == inputWord[ count + 1 ]){
+                        
+                        count++;
+                        match++;
+                        matchCol++;
+                        matchRow--;
+                        
+                    }
+                    
+                    
+                }
+            }
+
+            if(match == strlen(inputWord)){
+                
+                return 1;
+            }else return 0;
+            
+            
+        }
+        
+        if(matchDirection == 8){
+            int count = 0;
+            
+            int match = 0;
+            if(strlen(inputWord) > gridSize)return -1;
+            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
+                if(letterGrid[matchRow-1][matchCol] == inputWord[ count + 1 ]){
+                    return 1;
+                }
+            }
+            else{
+                while(count < strlen(inputWord)){
+                    if(letterGrid[matchRow-1][matchCol] == inputWord[ count + 1 ]){
+                        
+                        count++;
+                        match++;
+                        matchRow--;
+                        
+                    }
+                    
+                    
+                }
+            }
+            if(match == strlen(inputWord)){
+                return 1;
+            }else return 0;
+            
+        }
+        
+        if(matchDirection == 7){
+            int count = 0;
+            
+            int match = 0;
+            if(strlen(inputWord) > gridSize)return -1;
+            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
+                if(letterGrid[matchRow-1][matchCol - 1] == inputWord[ count + 1 ]){
+                    return 1;
+                }
+            }
+            else{
+                while(count < strlen(inputWord)){
+                    if(letterGrid[matchRow-1][matchCol - 1] == inputWord[ count + 1 ]){
+                        
+                        count++;
+                        match++;
+                        matchRow--;
+                        matchCol--;
+                        
+                    }
+                    
+                    
+                }
+            }
+            if(match == strlen(inputWord)){
+                return 1;
+            }else return 0;
+            
+        }
+        
+        
+    }
+    return 0;
 }
 
 
@@ -279,11 +530,43 @@ int main()
      You can move them elsewhere after testing
      Please make sure the five arguments are initialized properly */
     printLetterGrid(letterGrid, gridSize);
-    
     printWordList(wordList, listSize, matchingStatus);
     
     
+    
     /* Read the user input repeatedly until the puzzle finishes */
+    char inputWord[MAX_WORD];
+    int status = -1;
+    while(1){
+        printf("Enter the word: ");
+        scanf("%s",inputWord);
+        
+       status =  checkWordList(wordList,listSize,matchingStatus,inputWord);
+        if(status == -1){
+            printf("\nThe input word is not in the word list.\n");
+        }
+        else if (status == 0){
+            printf("\nThe input word has aldready been matched before.\n");
+        }
+        else{
+            int matchRow,matchCol,matchDir;
+            printf("\nEnter the row number, the column number, and the direction (1-4 or 6-9):");
+            scanf("%d %d %d",&matchRow,&matchCol,&matchDir);
+            int result = checkLetterGrid(letterGrid,gridSize,inputWord,matchRow,matchCol,matchDir);
+            if(result == -1){
+                printf("The search exceeds the boundary of the letter grid.\n");
+            }
+            else if(result == 0){
+                printf("\nThe input word cannot be found in the given location.\n");
+            }
+            else if(result == 1){
+                printf("\nThe word is found!\n");
+                //checking winning condition
+                
+                
+            }
+        }
+    }
     
     
     return 0;
