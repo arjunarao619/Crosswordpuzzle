@@ -69,7 +69,7 @@ int readWordListFromConsole(char wordList[MAX_WORDLIST][MAX_WORD]) {
     printf("Enter the word list:\n");
     for(i = 0; i < listSize; i++) {
         /* no & before wordList[i] since wordList[i] already represents the memory address */
-        scanf("%s", wordList[i]);
+        scanf("%s",  wordList[i]);
     }
     
     return listSize;
