@@ -64,7 +64,7 @@ int readWordListFromConsole(char wordList[MAX_WORDLIST][MAX_WORD]) {
     int i;
     int listSize;
     
-    printf("Enter the size of the word list:\n");
+    printf("Enter the size of the word list :\n");
     scanf("%d", &listSize);
     printf("Enter the word list:\n");
     for(i = 0; i < listSize; i++) {
