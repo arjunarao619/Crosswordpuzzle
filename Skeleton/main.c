@@ -561,9 +561,27 @@ int main()
             }
             else if(result == 1){
                 printf("\nThe word is found!\n");
+                //updating the matched status
+                for(int i=0;i<listSize;i++){
+                    if(strcmp(inputWord,wordList[i]) == 0){
+                        matchingStatus[i] = 1;
+                    }
+                }
+                
+                printLetterGrid(letterGrid, gridSize);
+                printWordList(wordList, listSize, matchingStatus);
+                
                 //checking winning condition
+                int winmatch = 0;
+                for(int i=0;i<listSize;i++){
+                    if(matchingStatus[i] == 1)winmatch++;
+                }
                 
-                
+                if(winmatch == listSize){
+                    //puzzle completed
+                    printf("\nYou have finished the puzzle.\nCongratulations!");
+                    exit(0);
+                }
             }
         }
     }
