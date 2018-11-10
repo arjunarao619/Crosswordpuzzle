@@ -84,12 +84,12 @@ int readLetterGridFromFile(char letterGrid[MAX_GRID][MAX_GRID]) {//TODO
     
     
     FILE *infile1;
-   // char fileLetterGrid[MAX_FILENAME];
+   char fileLetterGrid[MAX_FILENAME];
     
-//    printf("Enter filename of the letter grid: ");
-//    scanf("%s",fileLetterGrid);
+    printf("Enter filename of the letter grid: ");
+    scanf("%s",fileLetterGrid);
 
-    infile1 = fopen("LetterGrid.txt","r");
+    infile1 = fopen(fileLetterGrid,"r");
     
     if(infile1 == NULL){
        printf("Error in reading the letter grid file. Program terminates.");
@@ -100,11 +100,11 @@ int readLetterGridFromFile(char letterGrid[MAX_GRID][MAX_GRID]) {//TODO
     fscanf(infile1,"%d",&gridSize);
     printf("\n%d",gridSize);
     
-//    for(int i=0;i<gridSize;i++){
-//        for(int j=0;j<gridSize;j++){
-//            letterGrid[i][j] = getc(infile);
-//        }
-//    }
+    for(int i=0;i<gridSize;i++){
+       for(int j=0;j<gridSize;j++){
+            letterGrid[i][j] = getc(infile1);
+        }
+    }
     
     fclose(infile1);
     return gridSize;
@@ -122,7 +122,14 @@ int readWordListFromFile(char wordList[MAX_WORDLIST][MAX_WORD]) {//DONE
     //DOING - 3RD NOVEMBER
     FILE * infile;
     int listSize;
-    infile = fopen("WordList.txt","r");
+    char filename[MAX_FILENAME];
+    printf("Enter filename of the word list: ");
+    scanf("%s",filename);
+    infile = fopen(filename,"r");
+    if(infile == NULL){
+        printf("Error in reading the word list file. Program terminates.");
+        exit(1);
+    }
     listSize = fscanf(infile,"%d",&listSize); //scanning first line of text file to input the number of words in the list
     int i = 0;
     while(i<listSize){
@@ -226,269 +233,335 @@ int checkWordList(char wordList[MAX_WORDLIST][MAX_WORD], int listSize, int match
  This function should not print anything, except debugging messages (if any) */
 int checkLetterGrid(char letterGrid[MAX_GRID][MAX_GRID], int gridSize, char inputWord[MAX_WORD], int matchRow, int matchCol, int matchDirection) {
     
-    int matchSize = 0;
-    
-    if(letterGrid[matchRow][matchCol] == inputWord[0]){
-        matchSize++;
+    if(matchDirection==1){
+        int count = 0;
+        int matched =0;
+        int mr = matchRow;
+        int mc = matchCol;
         
-        if(matchDirection == 1){
-            int count = 0;
-            
-            int match = 0;
-            if(strlen(inputWord) > gridSize)return -1;
-            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
-                if(letterGrid[matchRow+1][matchCol - 1] == inputWord[ count + 1 ]){
-                    return 1;
-                }
-            }
-            else{
-                while(count < strlen(inputWord)){
-                    if(letterGrid[matchRow+1][matchCol - 1] == inputWord[ count + 1 ]){
-                        
-                        count++;
-                        match++;
-                        matchRow++;
-                        matchCol--;
-                        
-                    }
-                    
-                    
-                }
-            }
-            if(match == strlen(inputWord)){
+        if(strlen(inputWord) == 2){
+            if(letterGrid[mr+1][mc-1] == inputWord[count+1]){
                 return 1;
-            }else return 0;
-           
-            
-        }
-        
-        if(matchDirection == 2){
-            int count = 0;
-            
-            int match = 0;
-            if(strlen(inputWord) > gridSize)return -1;
-            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
-                if(letterGrid[matchRow++][matchCol] == inputWord[ count + 1 ]){
-                    return 1;
-                }
-            }
-            else{
-                while(count < strlen(inputWord)){
-                    if(letterGrid[matchRow++][matchCol] == inputWord[ count + 1 ]){
-                        
-                        count++;
-                        match++;
-                        matchRow++;
-                        
-                    }
-                    
-                    
-                }
-            }
-            if(match == strlen(inputWord)){
-                return 1;
-            }else return 0;
-            
-            
-        }
-        
-        if(matchDirection == 3){
-            int count = 0;
-            
-            int match = 0;
-            if(strlen(inputWord) > gridSize)return -1;
-            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
-                if(letterGrid[matchRow+1][matchCol + 1] == inputWord[ count + 1 ]){
-                    return 1;
-                }
-            }
-            else{
-                while(count < strlen(inputWord)){
-                    if(letterGrid[matchRow+1][matchCol + 1] == inputWord[ count + 1 ]){
-                        
-                        count++;
-                        match++;
-                        matchCol++;
-                        matchRow++;
-                        
-                    }
-                    
-                    
-                }
-            }
-            if(match == strlen(inputWord)){
-                return 1;
-            }else return 0;
-            
-            
-        }
-        
-        if(matchDirection == 4){
-            int count = 0;
-            
-            int match = 0;
-            if(strlen(inputWord) > gridSize)return -1;
-            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
-                if(letterGrid[matchRow][matchCol - 1] == inputWord[ count + 1 ]){
-                    return 1;
-                }
-            }
-            else{
-                while(count < strlen(inputWord)){
-                    if(letterGrid[matchRow][matchCol - 1] == inputWord[ count + 1 ]){
-                        printf("%c",letterGrid[matchRow][matchCol-1]);
-                        count++;
-                        match++;
-                        matchCol--;
-                        
-                    }
-                    
-                    
-                }
-            }
-            if(match == strlen(inputWord)){
-                return 1;
-            }else return 0;
-            
-            
-        }
-        
-        if(matchDirection == 6){
-            int count = 0;
-            
-            int match = 0;
-            if(strlen(inputWord) > gridSize)return -1;
-            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
-                if(letterGrid[matchRow][matchCol + 1] == inputWord[ count + 1 ]){
-                    return 1;
-                }
-            }
-            else{
-                while(count < strlen(inputWord)){
-                    if(letterGrid[matchRow][matchCol + 1] == inputWord[ count + 1 ]){
-                        
-                        count++;
-                        match++;
-                        matchCol++;
-                        
-                    }
-                    
-                    
-                }
-            }
-            if(match == strlen(inputWord)){
-                return 1;
-            }else return 0;
-            
-            
-        }
-        
-        if(matchDirection == 9){
-            int count = 0;
-            
-            int match = 0;
-            if(strlen(inputWord) > gridSize)return -1;
-            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
-                if(letterGrid[matchRow-1][matchCol + 1] == inputWord[ count + 1 ]){
-                    return 1;
-                }
-            }
-            else{
-                while(count < strlen(inputWord)){
-                    if(letterGrid[matchRow-1][matchCol +1] == inputWord[ count + 1 ]){
-                        
-                        count++;
-                        match++;
-                        matchCol++;
-                        matchRow--;
-                        
-                    }
-                    
-                    
-                }
+                
             }
 
-            if(match == strlen(inputWord)){
+        }
+        else{
+            while(count<strlen(inputWord)){
+                if(count > gridSize)exit(1);
+                if(letterGrid[mr+1][mc-1] == inputWord[count+1]){
+                    matched++;
+                    
+                }
                 
-                return 1;
-            }else return 0;
+                count++;
+                mr++;
+                mc--;
+            }
             
-            
+            if(matched == strlen(inputWord))return 1;
+            else return 0;
         }
-        
-        if(matchDirection == 8){
-            int count = 0;
-            
-            int match = 0;
-            if(strlen(inputWord) > gridSize)return -1;
-            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
-                if(letterGrid[matchRow-1][matchCol] == inputWord[ count + 1 ]){
-                    return 1;
-                }
-            }
-            else{
-                while(count < strlen(inputWord)){
-                    if(letterGrid[matchRow-1][matchCol] == inputWord[ count + 1 ]){
-                        
-                        count++;
-                        match++;
-                        matchRow--;
-                        
-                    }
-                    
-                    
-                }
-            }
-            if(match == strlen(inputWord)){
-                return 1;
-            }else return 0;
-            
-        }
-        
-        if(matchDirection == 7){
-            int count = 0;
-            
-            int match = 0;
-            if(strlen(inputWord) > gridSize)return -1;
-            if(strlen(inputWord) <=2){ //SPECIAL CASE ONLY FOR TWO-LETTERED WORDS
-                if(letterGrid[matchRow-1][matchCol - 1] == inputWord[ count + 1 ]){
-                    return 1;
-                }
-            }
-            else{
-                while(count < strlen(inputWord)){
-                    if(letterGrid[matchRow-1][matchCol - 1] == inputWord[ count + 1 ]){
-                        
-                        count++;
-                        match++;
-                        matchRow--;
-                        matchCol--;
-                        
-                    }
-                    
-                    
-                }
-            }
-            if(match == strlen(inputWord)){
-                return 1;
-            }else return 0;
-            
-        }
-        
         
     }
+    
+    else if(matchDirection == 2){
+        int count = 0;
+        int matched =0;
+        int mr = matchRow;
+        int mc = matchCol;
+        
+        if(strlen(inputWord) == 2){
+            if(letterGrid[mr+1][mc] == inputWord[count+1]){
+                return 1;
+                
+            }
+            
+        }
+        else{
+            while(count<strlen(inputWord)){
+                if(count > gridSize)exit(1);
+                if(letterGrid[mr+1][mc] == inputWord[count+1]){
+                    matched++;
+                    
+                }
+                
+                count++;
+                mr++;
+               // mc--;
+            }
+            
+            if(matched == strlen(inputWord))return 1;
+            else return 0;
+        }
+    }
+    
+    else if(matchDirection == 3){
+        int count = 0;
+        int matched =0;
+        int mr = matchRow;
+        int mc = matchCol;
+        
+        if(strlen(inputWord) == 2){
+            if(letterGrid[mr+1][mc+1] == inputWord[count+1]){
+                return 1;
+                
+            }
+            
+        }
+        else{
+            while(count<strlen(inputWord)){
+                if(count > gridSize)exit(1);
+                if(letterGrid[mr+1][mc+1] == inputWord[count+1]){
+                    matched++;
+                    
+                }
+                
+                count++;
+                mr++;
+                mc++;
+            }
+            
+            if(matched == strlen(inputWord))return 1;
+            else return 0;
+        }
+    }
+    else if(matchDirection == 4){
+        int count = 0;
+        int matched =0;
+        int mr = matchRow;
+        int mc = matchCol;
+        
+        if(strlen(inputWord) == 2){
+            if(letterGrid[mr][mc-1] == inputWord[count+1]){
+                return 1;
+                
+            }
+            
+        }
+        else{
+            while(count<strlen(inputWord)){
+                if(count > gridSize)exit(1);
+                if(letterGrid[mr][mc-1] == inputWord[count+1]){
+                    matched++;
+                    
+                }
+                
+                count++;
+              //  mr++;
+                mc--;
+            }
+            
+            if(matched == strlen(inputWord))return 1;
+            else return 0;
+        }
+    }
+    else if(matchDirection == 6){
+        int count = 0;
+        int matched =0;
+        int mr = matchRow;
+        int mc = matchCol;
+        
+        if(strlen(inputWord) == 2){
+            if(letterGrid[mr][mc+1] == inputWord[count+1]){
+                return 1;
+                
+            }
+            
+        }
+        else{
+            while(count<strlen(inputWord)){
+                if(count > gridSize)exit(1);
+                if(letterGrid[mr][mc+1] == inputWord[count+1]){
+                    matched++;
+                    
+                }
+                
+                count++;
+               // mr++;
+                mc++;
+            }
+            
+            if(matched == strlen(inputWord))return 1;
+            else return 0;
+        }
+    }
+    else if(matchDirection == 7){
+        int count = 0;
+        int matched =0;
+        int mr = matchRow;
+        int mc = matchCol;
+        
+        if(strlen(inputWord) == 2){
+            if(letterGrid[mr-1][mc-1] == inputWord[count+1]){
+                return 1;
+                
+            }
+            
+        }
+        else{
+            while(count<strlen(inputWord)){
+                if(count > gridSize)exit(1);
+                if(letterGrid[mr-1][mc-1] == inputWord[count+1]){
+                    matched++;
+                    
+                }
+                
+                count++;
+                mr--;
+                mc--;
+            }
+            
+            if(matched == strlen(inputWord))return 1;
+            else return 0;
+        }
+    }
+    else if(matchDirection == 8){
+        int count = 0;
+        int matched =0;
+        int mr = matchRow;
+        int mc = matchCol;
+        
+        if(strlen(inputWord) == 2){
+            if(letterGrid[mr-1][mc] == inputWord[count+1]){
+                return 1;
+                
+            }
+            
+        }
+        else{
+            while(count<strlen(inputWord)){
+                if(count > gridSize)exit(1);
+                if(letterGrid[mr-1][mc] == inputWord[count+1]){
+                    matched++;
+                    
+                }
+                
+                count++;
+                mr--;
+                
+            }
+            
+            if(matched == strlen(inputWord))return 1;
+            else return 0;
+        }
+    }
+    else if(matchDirection == 9){
+        int count = 0;
+        int matched =0;
+        int mr = matchRow;
+        int mc = matchCol;
+        
+        if(strlen(inputWord) == 2){
+            if(letterGrid[mr-1][mc+1] == inputWord[count+1]){
+                return 1;
+                
+            }
+            
+        }
+        else{
+            while(count<strlen(inputWord)){
+                if(count > gridSize)exit(1);
+                if(letterGrid[mr-1][mc+1] == inputWord[count+1]){
+                    matched++;
+                    
+                }
+                
+                count++;
+                mr--;
+                mc++;
+            }
+            
+            if(matched == strlen(inputWord))return 1;
+            else return 0;
+        }
+    }
+    else{
+        printf("\nInvalid direction");
+        return 0;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     return 0;
 }
 
 
 /* Display the secret table */
-void printSecretTable(/* put your parameter list here */) {
+void printSecretTable(char letterGrid[MAX_GRID][MAX_GRID],char wordList[MAX_WORDLIST][MAX_WORD],int gridSize,int listSize) {
+    printf("\n### Secret Table ###\n");
+    int number = 0;
+    char inputWord[MAX_WORD];
+    int count = 0;
+    int pr[50],pc[50],pd[50],inp[50];
+    int matched = 1;
+    int word = -1;
+    int direction = 0;
+    int matchRow = -1 ,matchCol = -1;
+    while(number <= listSize){
+        strcpy(inputWord,wordList[number]);
+        word++;
+        for(int i=0;i<gridSize;i++){ //FINDING THE MATCHROW AND MATCHCOL TO BE PASSED TO CHECKLETTERGRID FUNCTION
+            for(int j=0;j<gridSize;j++){
+                if(letterGrid[i][j] == inputWord[0]){
+                    
+                    matchRow = i;
+                    matchCol = j;
+                    
+                    //let's check the second character too.
+                    if(letterGrid[i+1][j-1] == inputWord[1])direction = 1;
+                    else if(letterGrid[i+1][j] == inputWord[1])direction = 2;
+                    else if(letterGrid[i+1][j+1] == inputWord[1])direction = 3;
+                    else if(letterGrid[i][j-1] == inputWord[1])direction = 4;
+                    else if(letterGrid[i][j+1] == inputWord[1])direction = 6;
+                    else if(letterGrid[i-1][j-1] == inputWord[1])direction = 7;
+                    else if(letterGrid[i-1][j] == inputWord[1])direction = 8;
+                    else if(letterGrid[i-1][j+1] == inputWord[1])direction = 9;
+                    else direction =0;
+                    pr[count] = matchRow;
+                    pc[count] = matchCol;
+                    pd[count] = direction;
+                    inp[count] = word;
+                    count++;
+                }
+            }
+        }
+        
+        
+number++;
+        
+    }
     
-    
-    /* TODO: Complete the function */
-    
+    for(int i=0;i<count;i++){
+        if(pd[i] !=0 && pd[i] != 5){
+            //printf("%s: R%d C%d D%d\n",wordList[inp[i]],pr[i],pc[i],pd[i]);
+            
+            matched = checkLetterGrid(letterGrid,gridSize,wordList[inp[i]],pr[i],pc[i],pd[i]);
+            if(matched ==1){
+                printf("%s: R%d C%d D%d\n",wordList[inp[i]],pr[i],pc[i],pd[i]);
+            }
+            
+        }
+        
+    }
     
 }
+
+
 
 /* The main() function */
 int main()
@@ -512,8 +585,9 @@ int main()
     
     /* Read the letter grid and the word list from file or console */
     if(choice == 'Y'){
-        gridSize = readLetterGridFromFile(letterGrid);
         listSize = readWordListFromFile(wordList);
+        gridSize = readLetterGridFromFile(letterGrid);
+        
     }
     else if (choice == 'N'){
         gridSize = readLetterGridFromConsole(letterGrid);
@@ -541,8 +615,13 @@ int main()
         printf("Enter the word: ");
         scanf("%s",inputWord);
         
+        if(strcmp(inputWord,"SECTBL") == 0){
+            printSecretTable(letterGrid, wordList,gridSize, listSize);
+        }
+        
        status =  checkWordList(wordList,listSize,matchingStatus,inputWord);
         if(status == -1){
+             if(strcmp(inputWord,"SECTBL") != 0)
             printf("\nThe input word is not in the word list.\n");
         }
         else if (status == 0){
